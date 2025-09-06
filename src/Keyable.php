@@ -14,15 +14,15 @@ trait Keyable
 
     public function createApiKey(array $attributes = []): NewApiKey
     {
-        $planTextApiKey = ApiKey::generate();
+        $plainTextApiKey = ApiKey::generate();
 
-        $apiKey = Model::withoutEvents(function () use ($planTextApiKey, $attributes) {
+        $apiKey = Model::withoutEvents(function () use ($plainTextApiKey, $attributes) {
             return $this->apiKeys()->create([
-                'key' => hash('sha256', $planTextApiKey),
+                'key' => hash('sha256', $plainTextApiKey),
                 'name' => $attributes['name'] ?? null,
             ]);
         });
 
-        return new NewApiKey($apiKey, "{$apiKey->getKey()}|{$planTextApiKey}");
+        return new NewApiKey($apiKey, "{$apiKey->getKey()}|{$plainTextApiKey}");
     }
 }
